@@ -1,0 +1,9 @@
+{
+  "commandDescription": "Utility to mass replace directory contents",
+  "pathFlagDescription": "Path of Directory",
+  "checkFlagDescription": "Check only",
+  "keyFlagDescription": "Find Term",
+  "replaceFlagDescription": "Replace Term",
+  "caseignoreFlagDescription": "Ignore Case",
+  "nameFlagDescription": "name to print"
+}
