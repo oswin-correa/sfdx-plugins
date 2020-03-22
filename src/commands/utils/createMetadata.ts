@@ -17,7 +17,7 @@ export default class CreateMetadata extends SfdxCommand {
 
   protected static flagsConfig = {
 	deploymenttimelimit: flags.integer({ char: 'w', description: 'How many minutes to wait for the deployment to finish', default: 200 }),
-	batchsize: flags.integer({ char: 'b', description: 'Batch Size', default: 10 }),
+	batchsize: flags.integer({ char: 'b', description: 'Batch Size', default: 5 }),
     filepath: flags.filepath({char: 'f', description: 'Path to comma seperated fully qualified object API names to which CDC has to be enabled', default: 'inputs.txt'}),
 	check: flags.boolean({char: 'c', description: 'Validate and donot deploy'}),
 	createxmlfile: flags.boolean({char: 'x', description: 'Create xml files along with the components'}),
@@ -61,6 +61,7 @@ export default class CreateMetadata extends SfdxCommand {
 			
 			
 			var entries = contents.split(',');
+			console.log(entries.length);
 			
 			if(contents.length > 0 && entries && entries.length > 0){
 						
@@ -93,6 +94,9 @@ export default class CreateMetadata extends SfdxCommand {
 				  return resultArray
 				}, [])
 				
+				console.log(result);
+				
+				
 				for(var i =0;i< result.length;i ++){
 					
 				  var entries = result[i];
@@ -102,12 +106,12 @@ export default class CreateMetadata extends SfdxCommand {
 				  for(var j =0;j < entries.length;j ++){
 						
 						var entry = entries[j];
-						var fileName = entry.replace('__c', '_ChangeEvent')
+						var fileName = entry.includes('__c') ? entry.replace('__c', '_ChangeEvent') : entry + '_ChangeEvent';
 						fileName = fileName.replace('__', '_');
 						fileName = 'ChangeEvents_'+ fileName;
 						memberBody += '<members>' + fileName + '</members>\n        ';
 						
-						var xmlEntry = entry.replace('__c', '__ChangeEvent');
+						var xmlEntry = entry.includes('__c') ? entry.replace('__c', '__ChangeEvent') : entry + '__ChangeEvent';
 						
 						var destinationPath = './tmp/'+ unpackagedDirectory +'/'+metadataType.plural+'/'+fileName+'.'+metadataType.singular;
 						
@@ -144,7 +148,7 @@ export default class CreateMetadata extends SfdxCommand {
 					if(this.flags.isdestructive)
 						fs.copySync('./templates/destructiveChanges/package.xml','./tmp/'+ unpackagedDirectory +'/package.xml');
 
-
+					
 					await  exec('sfdx force:mdapi:deploy -d ./tmp/'+ unpackagedDirectory +'/ --json ' + (this.flags.check ? ' -c ' : '') + '-u '+ this.org.getUsername(), (error, stdout, stderr) => {
 					  if (error) {
 						console.error(`exec error: ${error}`);
