@@ -23,10 +23,10 @@ export default class Replace extends SfdxCommand {
 
   protected static flagsConfig = {
 
-    path: flags.string({char: 'p', description: messages.getMessage('pathFlagDescription')}),
+    path: flags.string({char: 'p', description: messages.getMessage('pathFlagDescription'),required:true}),
 	check: flags.boolean({char: 'c', description: messages.getMessage('checkFlagDescription')}),
-	key: flags.string({char: 'k', description: messages.getMessage('keyFlagDescription')}),
-	replace: flags.string({char: 'r', description: messages.getMessage('replaceFlagDescription')}),
+	key: flags.string({char: 'k', description: messages.getMessage('keyFlagDescription'),required:true}),
+	replace: flags.string({char: 'r', description: messages.getMessage('replaceFlagDescription'),required:true}),
 	caseignore: flags.boolean({char: 'i', description: messages.getMessage('caseignoreFlagDescription')}),
 	
   };

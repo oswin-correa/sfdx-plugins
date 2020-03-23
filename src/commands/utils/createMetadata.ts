@@ -10,11 +10,6 @@ export default class CreateMetadata extends SfdxCommand {
 
   public static description = 'Creates and deletes metadata for a specified org';
 
-  public static examples = [
-
-  ];
-
-
   protected static flagsConfig = {
 	deploymenttimelimit: flags.integer({ char: 'w', description: 'How many minutes to wait for the deployment to finish', default: 200 }),
 	batchsize: flags.integer({ char: 'b', description: 'Batch Size', default: 5 }),
@@ -46,7 +41,7 @@ export default class CreateMetadata extends SfdxCommand {
 			return;
 		}
 		
-		console.log('-----Processing------');
+		console.log('Process initiated.This may take a while...');
 		
 		try{
 			
