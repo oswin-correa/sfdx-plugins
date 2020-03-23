@@ -62,6 +62,25 @@ d: Destrutive support
 
 u: org Id
 
+Org Compare
+-----------------
+Description: This utility provisions a comparision of artifacts between two salesforce orgs or a existing SFDX project and a org.
+
+Prerequisite
+1. Always run within a SFDX project with manifest, Recommended to create a new project when comparing two orgs
+2. Update the package.xml in manifest folder accordingly, as the comparision orgs metadata is pulled considering this. 
+
+Example: 
+sfdx utils:orgCompare -x compareorg@scratch.org -> When SFDX project already has a source for comparision
+sfdx utils:orgCompare -x  compareorg1@scratch.org -y compareorg2@scratch.org 
+
+Create a folder org_compare with a results.txt file. Paste this is any JSON viewer tool to get a detailed information regarding the comparision results
+
+
+x: UserName of Org 1
+
+y: UserName of Org2 (Optional)        
+
        
 
 
