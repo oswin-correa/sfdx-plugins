@@ -44,7 +44,7 @@ Prerequisite
 1. Context folder should have inputs.txt file if path to comma seperate file is not passed
 2. Copy templates folder from the  repo cloned folder(sfdx-plugin) and place it in the context folder
 
-Example: sfdx utils:createMetadata -u elem-23710@elementpboscratch.org 
+Example: sfdx utils:createMetadata -u org@scratch.org 
 
 w: How many minutes to wait for the deployment to finish
 
@@ -61,6 +61,8 @@ m: Metadata type
 d: Destrutive support
 
 u: org Id
+
+       
 
 
 
