@@ -74,7 +74,7 @@ Example:
 sfdx utils:orgCompare -x compareorg@scratch.org -> When SFDX project already has a source for comparision
 sfdx utils:orgCompare -x  compareorg1@scratch.org -y compareorg2@scratch.org 
 
-Create a folder org_compare with a results.txt file. Paste this is any JSON viewer tool to get a detailed information regarding the comparision results
+Creates a folder org_compare with a results.txt file. Paste this is any JSON viewer tool to get a detailed information regarding the comparision results
 
 
 x: UserName of Org 1
