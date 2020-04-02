@@ -18,6 +18,7 @@ export default class CreateMetadata extends SfdxCommand {
 	createxmlfile: flags.boolean({char: 'x', description: 'Create xml files along with the components'}),
 	metadatatype: flags.string({char: 'm', description: 'Metadata type',default: 'PlatformEventChannelMember'}),
 	isdestructive: flags.boolean({char: 'd', description: 'To delete components'}),
+	isscratchorg: flags.boolean({char: 's', description: 'Is Scratch Org?'})
   };
 
   // Comment this out if your command does not require an org username
@@ -56,7 +57,6 @@ export default class CreateMetadata extends SfdxCommand {
 			
 			
 			var entries = contents.split(',');
-			console.log(entries.length);
 			
 			if(contents.length > 0 && entries && entries.length > 0){
 						
@@ -88,9 +88,7 @@ export default class CreateMetadata extends SfdxCommand {
 
 				  return resultArray
 				}, [])
-				
-				console.log(result);
-				
+								
 				
 				for(var i =0;i< result.length;i ++){
 					
@@ -101,12 +99,19 @@ export default class CreateMetadata extends SfdxCommand {
 				  for(var j =0;j < entries.length;j ++){
 						
 						var entry = entries[j];
-						var fileName = entry.includes('__c') ? entry.replace('__c', '_ChangeEvent') : entry + '_ChangeEvent';
+						var entrySplit = entry.split('__');
+						
+						if(this.flags.isscratchorg && entrySplit.length > 2){
+							
+							entry = entry.replace(entrySplit[0]+'__', '');
+						}
+						
+						var fileName = entry.includes('__c') ? entry.replace('__c', '_ChangeEvent') : entry + 'ChangeEvent';
 						fileName = fileName.replace('__', '_');
 						fileName = 'ChangeEvents_'+ fileName;
 						memberBody += '<members>' + fileName + '</members>\n        ';
 						
-						var xmlEntry = entry.includes('__c') ? entry.replace('__c', '__ChangeEvent') : entry + '__ChangeEvent';
+						var xmlEntry = entry.includes('__c') ? entry.replace('__c', '__ChangeEvent') : entry + 'ChangeEvent';
 						
 						var destinationPath = './tmp/'+ unpackagedDirectory +'/'+metadataType.plural+'/'+fileName+'.'+metadataType.singular;
 						
@@ -144,7 +149,7 @@ export default class CreateMetadata extends SfdxCommand {
 						fs.copySync('./templates/destructiveChanges/package.xml','./tmp/'+ unpackagedDirectory +'/package.xml');
 
 					
-					await  exec('sfdx force:mdapi:deploy -d ./tmp/'+ unpackagedDirectory +'/ --json ' + (this.flags.check ? ' -c ' : '') + '-u '+ this.org.getUsername(), (error, stdout, stderr) => {
+					exec('sfdx force:mdapi:deploy -d ./tmp/'+ unpackagedDirectory +'/ --json ' + (this.flags.check ? ' -c ' : '') + '-u '+ this.org.getUsername(), (error, stdout, stderr) => {
 					  if (error) {
 						console.error(`exec error: ${error}`);
 						return;
