@@ -1,7 +1,7 @@
 import { flags, SfdxCommand } from '@salesforce/command';
 import { Messages, SfdxError } from '@salesforce/core';
 import { AnyJson } from '@salesforce/ts-types';
-import { exec } from 'child_process';
+var exec = require('child_process').exec;
 const fs = require('fs-extra');
 const replace = require('replace-in-file');
 var zipper = require('zip-local');
@@ -98,7 +98,7 @@ export default class CreateMetadata extends SfdxCommand {
 				  
 				  for(var j =0;j < entries.length;j ++){
 						
-						var entry = entries[j];
+						var entry = entries[j].trim();
 						var entrySplit = entry.split('__');
 						
 						if(this.flags.isscratchorg && entrySplit.length > 2){
@@ -109,7 +109,7 @@ export default class CreateMetadata extends SfdxCommand {
 						var fileName = entry.includes('__c') ? entry.replace('__c', '_ChangeEvent') : entry + 'ChangeEvent';
 						fileName = fileName.replace('__', '_');
 						fileName = 'ChangeEvents_'+ fileName;
-						memberBody += '<members>' + fileName + '</members>\n        ';
+						memberBody += '<members>' + fileName + '</members>\n';
 						
 						var xmlEntry = entry.includes('__c') ? entry.replace('__c', '__ChangeEvent') : entry + 'ChangeEvent';
 						
@@ -149,9 +149,10 @@ export default class CreateMetadata extends SfdxCommand {
 						fs.copySync('./templates/destructiveChanges/package.xml','./tmp/'+ unpackagedDirectory +'/package.xml');
 
 					
-					exec('sfdx force:mdapi:deploy -d ./tmp/'+ unpackagedDirectory +'/ --json ' + (this.flags.check ? ' -c ' : '') + '-u '+ this.org.getUsername(), (error, stdout, stderr) => {
+					
+					await exec('sfdx force:mdapi:deploy -d ./tmp/'+ unpackagedDirectory +'/ --json ' + (this.flags.check ? ' -c ' : '') + '-u '+ this.org.getUsername(), (error, stdout, stderr) => {
 					  if (error) {
-						console.error(`exec error: ${error}`);
+						//console.error(`exec error: ${error}`);
 						return;
 					  }
 					  var job = JSON.parse(stdout);
