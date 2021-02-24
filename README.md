@@ -20,17 +20,23 @@ Mass Replace
 -----------------
 Description: This utility can perform  replace all or find all functionality for nested directory structure
 
-Example: sfdx utils:replace -p D:\OFFICE\MMworkspace\MyOrg\src -k Account -r Test -i -c
+Utility to mass replace directory contents
 
-p: Path to the directory. Ideally should be pointing to default folder of the sfdx project,where the codebase resides for a ideal namespace replacement case
+USAGE
+  $ sfdx utils:replace -p <string> -k <string> -r <string> [-c] [-i] [--json] [--loglevel trace|debug|info|warn|error|fatal]
 
-k: keyword to be replaced
+OPTIONS
+  -c, --check                                     Check only
+  -i, --caseignore                                Ignore Case
+  -k, --key=key                                   (required) Find Term
+  -p, --path=path                                 (required) Path of Directory
+  -r, --replace=replace                           (required) Replace Term
+  --json                                          format output as json
+  --loglevel=(trace|debug|info|warn|error|fatal)  [default: warn] logging level for this command invocation
 
-r: Keyword to which above has to be replaced
-
-i: To support ignore case
-
-c: To check only and doesn't replace
+EXAMPLE
+  sfdx utils:replace -p D:OFFICEMMworkspaceMyOrgsrc -k Account -r Test -i -c
+     [ 'D:/OFFICE/MMworkspace/MyOrg/src/classes/createcontactclass.cls']
 
 -----------------
 Metadata Creator
@@ -43,23 +49,25 @@ Prerequisite
 1. Context folder should have inputs.txt file if path to comma seperate file is not passed
 2. Copy templates folder from the  repo cloned folder(sfdx-plugin) and place it in the context folder
 
-Example: sfdx utils:createMetadata -u org@scratch.org 
+Creates and deletes metadata for a specified org
 
-w: How many minutes to wait for the deployment to finish
+USAGE
+  $ sfdx utils:createMetadata [-w <integer>] [-b <integer>] [-f <filepath>] [-c] [-x] [-m <string>] [-d] [-s] [-u <string>] [--apiversion <string>] [--json] [--loglevel
+  trace|debug|info|warn|error|fatal]
 
-b: Batch Size
-
-f: Path to comma seperated fully qualified object API names, if not inputs.txt should be present in context folder 
-
-c: Validate only
-
-x: Create xml files along with the components
-
-m: Metadata type
-
-d: Destrutive support
-
-u: org Id
+OPTIONS
+  -b, --batchsize=batchsize                       [default: 5] Batch Size
+  -c, --check                                     Validate and donot deploy
+  -d, --isdestructive                             To delete components
+  -f, --filepath=filepath                         [default: inputs.txt] Path to comma seperated fully qualified object API names to which CDC has to be enabled
+  -m, --metadatatype=metadatatype                 [default: PlatformEventChannelMember] Metadata type
+  -s, --isscratchorg                              Is Scratch Org?
+  -u, --targetusername=targetusername             username or alias for the target org; overrides default target org
+  -w, --deploymenttimelimit=deploymenttimelimit   [default: 200] How many minutes to wait for the deployment to finish
+  -x, --createxmlfile                             Create xml files along with the components
+  --apiversion=apiversion                         override the api version used for api requests made by this command
+  --json                                          format output as json
+  --loglevel=(trace|debug|info|warn|error|fatal)  [default: warn] logging level for this command invocation
 
 -----------------
 Org Compare
@@ -70,35 +78,43 @@ Prerequisite
 1. Always run within a SFDX project with manifest, Recommended to create a new project when comparing two orgs
 2. Update the package.xml in manifest folder accordingly, as the comparision orgs metadata is pulled considering this. 
 
-Example: 
-sfdx utils:orgCompare -x compareorg@scratch.org -> When SFDX project already has a source for comparision
-sfdx utils:orgCompare -x  compareorg1@scratch.org -y compareorg2@scratch.org 
-
 Creates a folder org_compare with a results.txt file. Paste this is any JSON viewer tool to get a detailed information regarding the comparision results
 
-x: UserName of Org 1
+Compare two salesforce orgs and generates report
 
-y: UserName of Org2 (Optional)    
+USAGE
+  $ sfdx utils:orgCompare -x <string> [-y <string>] [--json] [--loglevel trace|debug|info|warn|error|fatal]
+
+OPTIONS
+  -x, --org1=org1                                 (required) Username of Org1
+  -y, --org2=org2                                 Username of Org2
+  --json                                          format output as json
+  --loglevel=(trace|debug|info|warn|error|fatal)  [default: warn] logging level for this command invocation
 
 -----------------
 List Objects
 -----------------
 Description: This utlity lists the objects from a org and also considers user custom additions to form a delimited file.
 
-Example: 
-sfdx utils:listObjects -u org@scratch.org -a Task,Case -> Creates a inputs.txt(default) file in the context directory with Taks and Case added and uses default comma as delimiter
+Lists the objects in the org as per specified de-limiter
 
-c: The type of objects to list: all, custom, or standard
+USAGE
+  $ sfdx utils:listObjects [-d <string>] [-c <string>] [-a <filepath>] [-i <filepath>] [-p <filepath>] [-s <string>] [-e <string>] [-u <string>] [--apiversion <string>]
+  [--json] [--loglevel trace|debug|info|warn|error|fatal]
 
-a: Additions apart from the ones generated by utility(Comma seperated) 
+OPTIONS
+  -a, --includelist=includelist                   Path to the comma seperated file to include
+  -c, --sobjecttypecategory=sobjecttypecategory   [default: custom] The type of objects to list: all, custom, or standard.
+  -d, --delimiter=delimiter                       [default: ,] Delimiter
+  -e, --endswithfilter=endswithfilter             Includes objects that ends with specific keywords(Comma seperated)
+  -i, --excludelist=excludelist                   Path to the comma seperated file to exclude
+  -p, --path=path                                 [default: inputs.txt] Path to the result file
+  -s, --startswithfilter=startswithfilter         Includes objects that starts with specific keywords(Comma seperated)
+  -u, --targetusername=targetusername             username or alias for the target org; overrides default target org
+  --apiversion=apiversion                         override the api version used for api requests made by this command
+  --json                                          format output as json
+  --loglevel=(trace|debug|info|warn|error|fatal)  [default: warn] logging level for this command invocation
 
-d: Delimiter
-
-p: path to the result file with extension mentioned Example: ./sample/objects.txt
-
-s: Includes objects that starts with specific keywords(Comma seperated)
-
-e: Includes objects that ends with specific keywords(Comma seperated) 
 
        
 
