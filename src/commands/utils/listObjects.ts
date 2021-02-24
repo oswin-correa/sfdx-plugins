@@ -11,7 +11,7 @@ export default class listObjects extends SfdxCommand {
   protected static flagsConfig = {
 	delimiter: flags.string({ char: 'd', description: 'Delimiter', required: false, default: ',' }),
 	sobjecttypecategory: flags.string({ char: 'c', description: 'The type of objects to list: all, custom, or standard.', required: false, default:'custom'}),
-	includelist: flags.string({ char: 'a', description: 'Path to the comma seperated file to include', required: false}),
+	includelist: flags.filepath({ char: 'a', description: 'Path to the comma seperated file to include', required: false}),
 	excludelist: flags.filepath({ char: 'i', description: 'Path to the comma seperated file to exclude', required: false}),
 	path: flags.filepath({char: 'p', description: 'Path to the result file',required:false,default:'inputs.txt'}),
 	startswithfilter: flags.string({char: 's', description: 'Includes objects that starts with specific keywords(Comma seperated)',required:false,default:''}),
